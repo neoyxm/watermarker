@@ -87,37 +87,38 @@ def gen_mark(args):
     set_opacity(mark, args.opacity)
 
     def mark_im(im):
-        ''' 在im图片上添加水印 im为打开的原图'''
+        # ''' 在im图片上添加水印 im为打开的原图'''
 
-        # 计算斜边长度
-        c = int(math.sqrt(im.size[0] * im.size[0] + im.size[1] * im.size[1]))
+        # # 计算斜边长度
+        # c = int(math.sqrt(im.size[0] * im.size[0] + im.size[1] * im.size[1]))
 
-        # 以斜边长度为宽高创建大图（旋转后大图才足以覆盖原图）
-        mark2 = Image.new(mode='RGBA', size=(c, c))
+        # # 以斜边长度为宽高创建大图（旋转后大图才足以覆盖原图）
+        # mark2 = Image.new(mode='RGBA', size=(c, c))
 
-        # 在大图上生成水印文字，此处mark为上面生成的水印图片
-        y, idx = 0, 0
-        while y < c:
-            # 制造x坐标错位
-            x = -int((mark.size[0] + args.space) * 0.5 * idx)
-            idx = (idx + 1) % 2
+        # # 在大图上生成水印文字，此处mark为上面生成的水印图片
+        # y, idx = 0, 0
+        # while y < c:
+        #     # 制造x坐标错位
+        #     x = -int((mark.size[0] + args.space) * 0.5 * idx)
+        #     idx = (idx + 1) % 2
 
-            while x < c:
-                # 在该位置粘贴mark水印图片
-                mark2.paste(mark, (x, y))
-                x = x + mark.size[0] + args.space
-            y = y + mark.size[1] + args.space
+        #     while x < c:
+        #         # 在该位置粘贴mark水印图片
+        #         mark2.paste(mark, (x, y))
+        #         x = x + mark.size[0] + args.space
+        #     y = y + mark.size[1] + args.space
 
-        # 将大图旋转一定角度
-        mark2 = mark2.rotate(args.angle)
+        # # 将大图旋转一定角度
+        # mark2 = mark2.rotate(args.angle)
 
-        # 在原图上添加大图水印
+        # # 在原图上添加大图水印
         if im.mode != 'RGBA':
             im = im.convert('RGBA')
-        im.paste(mark2,  # 大图
-                 (int((im.size[0] - c) / 2), int((im.size[1] - c) / 2)),  # 坐标
-                 mask=mark2.split()[3])
-        del mark2
+        # im.paste(mark2,  # 大图
+        #          (int((im.size[0] - c) / 2), int((im.size[1] - c) / 2)),  # 坐标
+        #          mask=mark2.split()[3])
+        # del mark2
+        im.paste(mark, (0, 0),  mask=mark.split()[3])
         return im
 
     return mark_im
